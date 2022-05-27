@@ -12,7 +12,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		@if (_fileClass.Files is not null && _fileClass.Files.Count > 0) foreach (var file in _fileClass.Files)
+		@if (_files is not null && _files.Count > 0) foreach (var file in _files)
 		{
 			<tr>
 				<td>@file.FileId</td>
@@ -33,20 +33,20 @@
 
 @code {
 
-	private FileClass _fileClass = new();
+	private List<FileClass> _files = new();
 	private string _pdfName = "";
 
 	protected override void OnInitialized() =>
-		_fileClass.Files = _fileService.GetAllPDFs();
+		_files = _fileService.GetAllPDFs();
 
 	private async Task HandleFileSelected(InputFileChangeEventArgs e)
 	{
 		if (e.File is not null)
 			await _fileService.Upload(e.File);
-		_fileClass.Files = _fileService.GetAllPDFs();
+		_files = _fileService.GetAllPDFs();
 	}
 
 	private void ShowOnCurrentPage(int fileId) =>
-		_pdfName = (_fileClass.Files.FirstOrDefault(x => x.FileId == fileId) ?? new()).Name;
+		_pdfName = (_files.FirstOrDefault(x => x.FileId == fileId) ?? new()).Name;
 
 }

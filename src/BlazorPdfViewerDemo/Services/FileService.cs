@@ -13,10 +13,8 @@ public class FileService : IFileService
 {
 	IWebHostEnvironment _webHostEnvironment;
 
-    public FileService(IWebHostEnvironment webHostEnvironment)
-    {
+    public FileService(IWebHostEnvironment webHostEnvironment) =>
         _webHostEnvironment = webHostEnvironment;
-    }
 
     public List<FileClass> GetAllPDFs()
 	{
