@@ -1,7 +1,7 @@
 ﻿@page "/"
 @inject IFileService _fileService
 
-<BlazorInputFile.InputFile OnChange="HandleFileSelected" />
+<InputFile OnChange="HandleFileSelected" />
 
 <table class="table table-bordered" style="margin-top:10px">
 	<thead>
@@ -36,15 +36,13 @@
 	private FileClass _fileClass = new();
 	private string _pdfName = "";
 
-	private async Task HandleFileSelected(IFileListEntry[] entryFiles)
+	protected override void OnInitialized() =>
+		_fileClass.Files = _fileService.GetAllPDFs();
+
+	private async Task HandleFileSelected(InputFileChangeEventArgs e)
 	{
-		foreach (var file in entryFiles)
-		{
-			if (file is not null)
-			{
-				await _fileService.Upload(file);
-			}
-		}
+		if (e.File is not null)
+			await _fileService.Upload(e.File);
 		_fileClass.Files = _fileService.GetAllPDFs();
 	}
 

@@ -1,5 +1,5 @@
-﻿using BlazorInputFile;
-using BlazorPdfViewerDemo.Data;
+﻿using BlazorPdfViewerDemo.Data;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace BlazorPdfViewerDemo.Services
 {
@@ -29,15 +29,16 @@ namespace BlazorPdfViewerDemo.Services
 			return files;
 		}
 
-		public async Task Upload(IFileListEntry file)
-		{
+        public async Task Upload(IBrowserFile file)
+        {
 			var path = Path.Combine(_hostingEnvironment.WebRootPath, "files", file.Name);
 			var memoryStream = new MemoryStream();
-			await file.Data.CopyToAsync(memoryStream);
+			await file.OpenReadStream(10485760).CopyToAsync(memoryStream);
 			using (var fileStream = new FileStream(path, FileMode.Create, FileAccess.Write))
 			{
 				memoryStream.WriteTo(fileStream);
 			}
+			memoryStream.Close();
 		}
-	}
+    }
 }
