@@ -46,9 +46,7 @@
 		_fileClass.Files = _fileService.GetAllPDFs();
 	}
 
-	private void ShowOnCurrentPage(int fileId)
-	{
-		_pdfName = _fileClass.Files.SingleOrDefault(x => x.FileId == fileId).Name;
-	}
+	private void ShowOnCurrentPage(int fileId) =>
+		_pdfName = (_fileClass.Files.FirstOrDefault(x => x.FileId == fileId) ?? new()).Name;
 
 }
