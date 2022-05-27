@@ -1,9 +1,5 @@
 ﻿@page "/"
-@using BlazorPdfViewerDemo.Data
-@using BlazorInputFile
-@using BlazorPdfViewerDemo.Services
 @inject IFileService _fileService
-@inject IJSRuntime _js
 
 <BlazorInputFile.InputFile OnChange="HandleFileSelected" />
 
@@ -16,19 +12,16 @@
 		</tr>
 	</thead>
 	<tbody>
-		@if (_fileClass.Files is not null && _fileClass.Files.Count > 0)
+		@if (_fileClass.Files is not null && _fileClass.Files.Count > 0) foreach (var file in _fileClass.Files)
 		{
-			foreach (var file in _fileClass.Files)
-			{
-				<tr>
-					<td>@file.FileId</td>
-					<td>@file.Name</td>
-					<td>
-						<button @onclick="(e => ShowOnCurrentPage(file.FileId))">Current Page</button>
-						<button @onclick="(e => ShowOnNewTab(file.FileId))">New Tab</button>
-					</td>
-				</tr>
-			}
+			<tr>
+				<td>@file.FileId</td>
+				<td>@file.Name</td>
+				<td>
+					<button class="btn btn-primary" @onclick="(e => ShowOnCurrentPage(file.FileId))">Current Page</button>
+					<a class="btn btn-primary" href="files/@file.Name" target="_blank">New Tab</a>
+				</td>
+			</tr>
 		}
 	</tbody>
 </table>
@@ -41,18 +34,15 @@
 @code {
 
 	private FileClass _fileClass = new();
-	private List<IFileListEntry> _files = new();
 	private string _pdfName = "";
 
 	private async Task HandleFileSelected(IFileListEntry[] entryFiles)
 	{
-		_files = new();
 		foreach (var file in entryFiles)
 		{
 			if (file is not null)
 			{
 				await _fileService.Upload(file);
-				_files.Add(file);
 			}
 		}
 		_fileClass.Files = _fileService.GetAllPDFs();
@@ -61,12 +51,6 @@
 	private void ShowOnCurrentPage(int fileId)
 	{
 		_pdfName = _fileClass.Files.SingleOrDefault(x => x.FileId == fileId).Name;
-	}
-
-	private void ShowOnNewTab(int fileId)
-	{
-		_pdfName = _fileClass.Files.SingleOrDefault(x => x.FileId == fileId).Name;
-		_js.InvokeVoidAsync("OpenNewTab", _pdfName);
 	}
 
 }
