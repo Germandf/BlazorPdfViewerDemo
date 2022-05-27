@@ -1,0 +1,72 @@
+﻿@page "/"
+@using BlazorPdfViewerDemo.Data
+@using BlazorInputFile
+@using BlazorPdfViewerDemo.Services
+@inject IFileService _fileService
+@inject IJSRuntime _js
+
+<BlazorInputFile.InputFile OnChange="HandleFileSelected" />
+
+<table class="table table-bordered" style="margin-top:10px">
+	<thead>
+		<tr>
+			<th>SL</th>
+			<th>PDF Name</th>
+			<th>Action</th>
+		</tr>
+	</thead>
+	<tbody>
+		@if (_fileClass.Files is not null && _fileClass.Files.Count > 0)
+		{
+			foreach (var file in _fileClass.Files)
+			{
+				<tr>
+					<td>@file.FileId</td>
+					<td>@file.Name</td>
+					<td>
+						<button @onclick="(e => ShowOnCurrentPage(file.FileId))">Current Page</button>
+						<button @onclick="(e => ShowOnNewTab(file.FileId))">New Tab</button>
+					</td>
+				</tr>
+			}
+		}
+	</tbody>
+</table>
+
+@if (!string.IsNullOrWhiteSpace(_pdfName))
+{
+	<iframe src="/files/@_pdfName" style="width:100%;height:1200px;"></iframe>
+}
+
+@code {
+
+	private FileClass _fileClass = new();
+	private List<IFileListEntry> _files = new();
+	private string _pdfName = "";
+
+	private async Task HandleFileSelected(IFileListEntry[] entryFiles)
+	{
+		_files = new();
+		foreach (var file in entryFiles)
+		{
+			if (file is not null)
+			{
+				await _fileService.Upload(file);
+				_files.Add(file);
+			}
+		}
+		_fileClass.Files = _fileService.GetAllPDFs();
+	}
+
+	private void ShowOnCurrentPage(int fileId)
+	{
+		_pdfName = _fileClass.Files.SingleOrDefault(x => x.FileId == fileId).Name;
+	}
+
+	private void ShowOnNewTab(int fileId)
+	{
+		_pdfName = _fileClass.Files.SingleOrDefault(x => x.FileId == fileId).Name;
+		_js.InvokeVoidAsync("OpenNewTab", _pdfName);
+	}
+
+}
