@@ -1,0 +1,17 @@
+﻿@page "/pdf-express"
+@inject IJSRuntime _js
+
+<div id='viewer' style='height: 600px;'></div>
+
+@code {
+
+    private string _pdfUrl = "https://pdftron.s3.amazonaws.com/downloads/pl/demo-annotated.pdf";
+
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await _js.InvokeAsync<object>("initWebViewer", _pdfUrl);
+        }
+    }
+}

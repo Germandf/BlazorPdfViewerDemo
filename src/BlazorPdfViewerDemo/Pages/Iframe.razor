@@ -1,0 +1,54 @@
+﻿@page "/iframe"
+@inject IFileService _fileService
+
+<article class="content px-4">
+	<InputFile OnChange="HandleFileSelected" />
+
+	<table class="table table-bordered" style="margin-top:10px">
+		<thead>
+			<tr>
+				<th>SL</th>
+				<th>PDF Name</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			@if (_files is not null && _files.Count > 0) foreach (var file in _files)
+			{
+				<tr>
+					<td>@file.FileId</td>
+					<td>@file.Name</td>
+					<td>
+						<button class="btn btn-primary" @onclick="(e => ShowOnCurrentPage(file.FileId))">Current Page</button>
+						<a class="btn btn-primary" href="files/@file.Name" target="_blank">New Tab</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</article>
+
+@if (!string.IsNullOrWhiteSpace(_pdfName))
+{
+	<iframe src="/files/@_pdfName" style="width:100%;height:1200px;"></iframe>
+}
+
+@code {
+
+	private List<FileClass> _files = new();
+	private string _pdfName = "";
+
+	protected override void OnInitialized() =>
+		_files = _fileService.GetAllPDFs();
+
+	private async Task HandleFileSelected(InputFileChangeEventArgs e)
+	{
+		if (e.File is not null)
+			await _fileService.Upload(e.File);
+		_files = _fileService.GetAllPDFs();
+	}
+
+	private void ShowOnCurrentPage(int fileId) =>
+		_pdfName = (_files.FirstOrDefault(x => x.FileId == fileId) ?? new()).Name;
+
+}
