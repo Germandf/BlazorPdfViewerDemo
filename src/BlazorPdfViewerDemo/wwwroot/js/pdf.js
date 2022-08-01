@@ -1,7 +1,7 @@
-window.initWebViewer = (pdfUrl) => {
+window.initWebViewer = (key, pdfUrl) => {
     WebViewer({
         path: 'lib',
-        licenseKey: 'ECsEG9yby6XpiiqaZmJY',
+        licenseKey: key,
         initialDoc: pdfUrl
     }, document.getElementById('viewer')).then((instance) => {
         instance.UI.disableElements(['selectToolButton']);

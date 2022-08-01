@@ -1,5 +1,6 @@
 ﻿@page "/pdf-express"
 @inject IJSRuntime _js
+@inject NavigationManager _navigationManager
 
 <article class="content p-4">
     <input @bind-value="@_pdfUrl" />
@@ -14,6 +15,12 @@
 
     private async Task LoadPdf()
     {
-        await _js.InvokeAsync<object>("initWebViewer", _pdfUrl);
+        var domain = _navigationManager.BaseUri;
+        var key = "";
+
+        if (domain.Contains("localhost"))
+            key = "ECsEG9yby6XpiiqaZmJY";
+
+        await _js.InvokeAsync<object>("initWebViewer", key, _pdfUrl);
     }
 }
