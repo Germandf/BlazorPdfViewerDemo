@@ -7,7 +7,8 @@
 </article>
 
 <div class="control-section">
-    <SfPdfViewerServer @ref="@_viewer" Height="640px" Width="100%" />
+    <SfPdfViewerServer @ref="@_viewer" 
+        Height="640px" Width="100%" EnableNavigationToolbar="false" ToolbarSettings="@_toolbarSettings" />
 </div>
 
 @code {
@@ -24,5 +25,18 @@
         string base64String = Convert.ToBase64String(byteArray);
         await _viewer.LoadAsync("data:application/pdf;base64," + base64String, null);
     }
+
+    private PdfViewerToolbarSettings _toolbarSettings = new PdfViewerToolbarSettings()
+    {
+        ToolbarItems = new List<ToolbarItem>()
+        {
+            ToolbarItem.PageNavigationTool,
+            ToolbarItem.MagnificationTool,
+            ToolbarItem.SelectionTool,
+            ToolbarItem.PanTool,
+            ToolbarItem.PrintOption,
+            ToolbarItem.DownloadOption
+        }
+    };
 
 }
