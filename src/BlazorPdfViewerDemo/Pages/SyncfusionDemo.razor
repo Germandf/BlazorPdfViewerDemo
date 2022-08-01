@@ -6,10 +6,8 @@
     <button @onclick="LoadPdf">Load</button>
 </article>
 
-<div class="control-section">
-    <SfPdfViewerServer @ref="@_viewer" 
-        Height="640px" Width="100%" EnableNavigationToolbar="false" ToolbarSettings="@_toolbarSettings" DownloadFileName="custom-name" />
-</div>
+<SfPdfViewerServer @ref="@_viewer" Height="640px" Width="100%" 
+    EnableNavigationToolbar="false" ToolbarSettings="@_toolbarSettings" DownloadFileName="custom-name" />
 
 @code {
 
