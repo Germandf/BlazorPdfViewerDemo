@@ -529,4 +529,9 @@
     <None Include="wwwroot\lib\webviewer.min.js" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="20.2.0.40" />
+    <PackageReference Include="Syncfusion.Blazor.Themes" Version="20.2.0.40" />
+  </ItemGroup>
+
 </Project>

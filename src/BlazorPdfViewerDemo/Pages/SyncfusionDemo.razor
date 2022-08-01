@@ -1,0 +1,28 @@
+﻿@page "/syncfusion"
+@using System.Net
+
+<article class="content p-4">
+    <input @bind-value="@_pdfUrl" />
+    <button @onclick="LoadPdf">Load</button>
+</article>
+
+<div class="control-section">
+    <SfPdfViewerServer @ref="@_viewer" Height="640px" Width="100%" />
+</div>
+
+@code {
+
+    // https://blazor.syncfusion.com/documentation/pdfviewer/getting-started/features
+
+    private string _pdfUrl = "https://pdftron.s3.amazonaws.com/downloads/pl/demo-annotated.pdf";
+    SfPdfViewerServer _viewer = new();
+
+    private async Task LoadPdf()
+    {
+        WebClient c = new WebClient();
+        byte[] byteArray = c.DownloadData(_pdfUrl);
+        string base64String = Convert.ToBase64String(byteArray);
+        await _viewer.LoadAsync("data:application/pdf;base64," + base64String, null);
+    }
+
+}

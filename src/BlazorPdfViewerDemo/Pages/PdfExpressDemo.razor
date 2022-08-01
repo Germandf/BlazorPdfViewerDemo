@@ -16,12 +16,4 @@
     {
         await _js.InvokeAsync<object>("initWebViewer", _pdfUrl);
     }
-
-    protected override async void OnAfterRender(bool firstRender)
-    {
-        if (firstRender)
-        {
-            //await _js.InvokeAsync<object>("initWebViewer", _pdfUrl);
-        }
-    }
 }
