@@ -11,6 +11,8 @@ window.initWebViewer = (key, pdfUrl, error) => {
         instance.UI.disableElements(['thumbnailsSizeSlider']);
         instance.UI.disableElements(['thumbnailsPanelButton']);
         instance.UI.disableElements(['leftPanelTabs']);
+        instance.UI.disableElements(['themeChangeButton']);
+        instance.UI.disableElements(['languageButton']);
         instance.UI.setLanguage('es');
         instance.UI.setToolMode('Pan');
         instance.UI.iframeWindow.addEventListener('loaderror', (err) => {
@@ -19,6 +21,11 @@ window.initWebViewer = (key, pdfUrl, error) => {
         const { documentViewer } = instance.Core;
         documentViewer.addEventListener('toolModeUpdated', () => {
             instance.UI.setToolMode('Pan');
+        });
+        instance.updateElement('printButton', {
+            onClick: () => {
+                instance.UI.printInBackground();
+            }
         });
     });
 };

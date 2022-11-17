@@ -1,0 +1,12 @@
+﻿@page "/pdf-js"
+@using System.Web;
+
+<div>
+    <iframe id="pdf-js-viewer" src="pdfjs/web/viewer.html?file=@_pdfUrl" title="webviewer" frameborder="0" width="500" height="600"></iframe>
+</div>
+
+@code {
+
+    private string _pdfUrl = HttpUtility.UrlEncode("https://pdftron.s3.amazonaws.com/downloads/pl/demo-annotated.pdf");
+
+}
