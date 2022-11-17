@@ -21,6 +21,7 @@
         if (domain.Contains("localhost"))
             key = "ECsEG9yby6XpiiqaZmJY";
 
-        await _js.InvokeAsync<object>("initWebViewer", key, _pdfUrl);
+        var error = "Custom error handling message";
+        await _js.InvokeAsync<object>("initWebViewer", key, _pdfUrl, error);
     }
 }
